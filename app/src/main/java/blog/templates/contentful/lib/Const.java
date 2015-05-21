@@ -1,21 +1,18 @@
 package blog.templates.contentful.lib;
 
-import blog.templates.contentful.App;
-import blog.templates.contentful.R;
-
 /** Const. */
 public class Const {
   private Const() {
     throw new AssertionError();
   }
 
-  // Content Type IDs
-  public static final String CONTENT_TYPE_AUTHOR =
-      App.get().getString(R.string.content_type_author);
+  public static final String SPACE_ID = "j3bpqm3bs1zw";
 
-  public static final String CONTENT_TYPE_CATEGORY =
-      App.get().getString(R.string.content_type_category);
+  public static final String ACCESS_TOKEN = "f3f12e5625e252ec7c4215c155747c9eab3665ef5dc7b576a4221f42ae53e732";
 
-  public static final String CONTENT_TYPE_POST =
-      App.get().getString(R.string.content_type_post);
+  public static final String CONTENT_TYPE_AUTHOR = "1kUEViTN4EmGiEaaeC6ouY";
+
+  public static final String CONTENT_TYPE_CATEGORY = "5KMiN6YPvi42icqAUQMCQe";
+
+  public static final String CONTENT_TYPE_POST = "2wKn6yEnZewu2SCCkus4as";
 }
