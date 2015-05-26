@@ -1,15 +1,16 @@
-package blog.templates.contentful.sync;
+package blog.templates.contentful.vault;
 
 import blog.templates.contentful.lib.Const;
 import com.contentful.vault.Asset;
 import com.contentful.vault.ContentType;
 import com.contentful.vault.Field;
+import com.contentful.vault.Resource;
 import java.util.List;
 import org.parceler.Parcel;
 
 @ContentType(Const.CONTENT_TYPE_POST)
 @Parcel
-public class Post {
+public class Post extends Resource {
   @Field String title;
 
   @Field String slug;
@@ -28,7 +29,7 @@ public class Post {
 
   @Field String date;
 
-  @Field boolean comments;
+  @Field Boolean comments;
 
   public String title() {
     return title;

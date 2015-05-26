@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-/** Helper class to generate links that can be intercepted by this app. */
 public class LinkGenerator {
   private LinkGenerator() {
     throw new AssertionError();

@@ -3,8 +3,8 @@ package blog.templates.contentful.adapters;
 import android.view.View;
 import android.widget.TextView;
 import blog.templates.contentful.R;
-import blog.templates.contentful.dto.Author;
-import blog.templates.contentful.dto.Post;
+import blog.templates.contentful.vault.Author;
+import blog.templates.contentful.vault.Post;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import java.util.List;
@@ -12,9 +12,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-/**
- * Adapter to display a list of posts.
- */
 public class PostListAdapter extends AbsListAdapter<Post, PostListAdapter.ViewHolder> {
   public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("dd, MMM yyyy");
 
@@ -55,6 +52,7 @@ public class PostListAdapter extends AbsListAdapter<Post, PostListAdapter.ViewHo
 
   static class ViewHolder {
     @InjectView(R.id.title) TextView title;
+
     @InjectView(R.id.date) TextView date;
 
     ViewHolder(View rootView) {

@@ -1,6 +1,5 @@
 package blog.templates.contentful.activities;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,61 +10,46 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ListView;
-import blog.templates.contentful.Intents;
+import blog.templates.contentful.App;
 import blog.templates.contentful.R;
 import blog.templates.contentful.adapters.AbsListAdapter;
-import blog.templates.contentful.sync.SyncService;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import com.contentful.vault.Vault;
 import java.util.List;
 
 public abstract class AbsListActivity<A, L> extends AbsActivity
     implements SwipeRefreshLayout.OnRefreshListener,
     LoaderManager.LoaderCallbacks<L> {
 
-  protected abstract int getLoaderId();
-  protected abstract AbsListAdapter<A, ?> createAdapter();
-  protected abstract List<A> getResultList(L data);
-
-  // Views
-  @InjectView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-  @InjectView(R.id.list) ListView listView;
-
-  // Data
   protected final int LOADER_ID = getLoaderId();
+
   protected AbsListAdapter<A, ?> adapter;
 
-  // Receivers
   protected BroadcastReceiver reloadReceiver;
-  protected BroadcastReceiver errorReceiver;
+
+  protected abstract int getLoaderId();
+
+  protected abstract AbsListAdapter<A, ?> createAdapter();
+
+  protected abstract List<A> getResultList(L data);
+
+  @InjectView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+
+  @InjectView(R.id.list) ListView listView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_list);
     ButterKnife.inject(this);
 
-    // Adapter
     adapter = createAdapter();
-
-    // Receivers
     createReceivers();
-    registerReceiver(reloadReceiver, new IntentFilter(Intents.ACTION_RELOAD));
-
-    // Loaders
+    registerReceiver(reloadReceiver, new IntentFilter(Vault.ACTION_SYNC_COMPLETE));
     initList();
     initSwipeRefresh();
     initLoader();
-  }
-
-  @Override protected void onResume() {
-    super.onResume();
-    registerReceiver(errorReceiver, new IntentFilter(Intents.ACTION_SHOW_ERROR));
-  }
-
-  @Override protected void onPause() {
-    unregisterReceiver(errorReceiver);
-    super.onPause();
   }
 
   @Override public void onDestroy() {
@@ -79,27 +63,6 @@ public abstract class AbsListActivity<A, L> extends AbsActivity
         restartLoader();
       }
     };
-
-    errorReceiver = new BroadcastReceiver() {
-      @Override public void onReceive(Context context, Intent intent) {
-        showErrorDialog(intent.getIntExtra(Intents.EXTRA_STATUS_CODE, -1));
-      }
-    };
-  }
-
-  protected void showErrorDialog(int httpStatusCode) {
-    int title = R.string.dialog_general_error_title;
-    int message = R.string.dialog_general_error_message;
-
-    if (httpStatusCode == 401) {
-      message = R.string.dialog_unauthorized_error_message;
-    }
-
-    new AlertDialog.Builder(this)
-        .setTitle(title)
-        .setMessage(message)
-        .setPositiveButton(android.R.string.ok, null)
-        .show();
   }
 
   protected void initSwipeRefresh() {
@@ -130,11 +93,10 @@ public abstract class AbsListActivity<A, L> extends AbsActivity
   }
 
   @Override public void onLoaderReset(Loader<L> loader) {
-
   }
 
   @Override public void onRefresh() {
-    SyncService.sync();
+    App.requestSync();
   }
 
   @OnItemClick(R.id.list)

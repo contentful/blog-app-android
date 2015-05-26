@@ -1,4 +1,4 @@
-package blog.templates.contentful.sync;
+package blog.templates.contentful.vault;
 
 import blog.templates.contentful.lib.Const;
 import com.contentful.vault.Asset;

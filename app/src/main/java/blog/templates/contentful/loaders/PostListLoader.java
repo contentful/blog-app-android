@@ -1,84 +1,51 @@
 package blog.templates.contentful.loaders;
 
 import android.support.annotation.Nullable;
-import blog.templates.contentful.dto.Author;
-import blog.templates.contentful.dto.Post;
-import blog.templates.contentful.lib.RealmConverter;
-import blog.templates.contentful.sync.RealmAuthor;
-import blog.templates.contentful.sync.RealmPost;
-import io.realm.Realm;
-import io.realm.RealmResults;
+import blog.templates.contentful.vault.Author;
+import blog.templates.contentful.vault.BlogSpace;
+import blog.templates.contentful.vault.Post;
+import com.contentful.vault.Vault;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Loader for a list of posts. */
-public class PostListLoader extends AbsLoader<PostListLoader.Result> {
+public class PostListLoader extends AbsAsyncLoader<PostListLoader.Result> {
   private final String authorRemoteId;
 
-  private PostListLoader(@Nullable String authorRemoteId) {
+  public PostListLoader(@Nullable String authorRemoteId) {
     super();
     this.authorRemoteId = authorRemoteId;
   }
 
-  public static PostListLoader newInstance() {
-    return new PostListLoader(null);
-  }
-
-  public static PostListLoader forAuthor(String remoteId) {
-    return new PostListLoader(remoteId);
-  }
-
   @Override protected Result performLoad() {
-    Result result;
-    Realm realm = Realm.getInstance(getContext());
-
-    try {
-      List<Post> posts = getPostList(realm, authorRemoteId);
-
-      Author author = null;
-      if (authorRemoteId != null) {
-        author = getAuthor(realm, authorRemoteId);
-      }
-
-      result = new Result(posts, author);
-    } finally {
-      realm.close();
-    }
-
-    return result;
-  }
-
-  private Author getAuthor(Realm realm, String authorRemoteId) {
-    RealmAuthor realmAuthor =
-        realm.where(RealmAuthor.class).equalTo("remoteId", authorRemoteId).findFirst();
-
-    if (realmAuthor != null) {
-      return RealmConverter.author(realmAuthor);
-    }
-    
-    return null;
-  }
-
-  private List<Post> getPostList(Realm realm, String authorRemoteId) {
-    RealmResults<RealmPost> posts;
-
+    Vault vault = Vault.with(getContext(), BlogSpace.class);
+    List<Post> posts = vault.fetch(Post.class).all();
     if (authorRemoteId == null) {
-      posts = realm.allObjects(RealmPost.class);
-    } else {
-      posts = realm.where(RealmPost.class).equalTo("authors.remoteId", authorRemoteId).findAll();
+      return new Result(posts, null);
     }
 
-    return convert(posts);
+    Author author = vault.fetch(Author.class)
+        .where("remote_id = ?", authorRemoteId)
+        .first();
+
+    List<Post> filtered = new ArrayList<>();
+    if (author != null) {
+      for (Post post : posts) {
+        if (postAuthorMatches(post, authorRemoteId)) {
+          filtered.add(post);
+        }
+      }
+    }
+
+    return new Result(filtered, author);
   }
 
-  private List<Post> convert(RealmResults<RealmPost> posts) {
-    List<Post> result = new ArrayList<>();
-
-    for (RealmPost post : posts) {
-      result.add(RealmConverter.post(post));
+  private boolean postAuthorMatches(Post post, String remoteId) {
+    for (Author author : post.authors()) {
+      if (remoteId.equals(author.remoteId())) {
+        return true;
+      }
     }
-
-    return result;
+    return false;
   }
 
   public static class Result {
@@ -90,11 +57,11 @@ public class PostListLoader extends AbsLoader<PostListLoader.Result> {
       this.author = author;
     }
 
-    public List<Post> getPosts() {
+    public List<Post> posts() {
       return posts;
     }
 
-    public Author getAuthor() {
+    public Author author() {
       return author;
     }
   }

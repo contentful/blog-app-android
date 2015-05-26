@@ -1,6 +1,5 @@
 package blog.templates.contentful.lib;
 
-/** Const. */
 public class Const {
   private Const() {
     throw new AssertionError();

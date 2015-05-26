@@ -1,15 +1,15 @@
-package blog.templates.contentful.sync;
+package blog.templates.contentful.vault;
 
 import blog.templates.contentful.lib.Const;
 import com.contentful.vault.Asset;
 import com.contentful.vault.ContentType;
 import com.contentful.vault.Field;
-import java.util.List;
+import com.contentful.vault.Resource;
 import org.parceler.Parcel;
 
 @ContentType(Const.CONTENT_TYPE_AUTHOR)
 @Parcel
-public class Author {
+public class Author extends Resource {
   @Field String name;
 
   @Field String website;
@@ -17,9 +17,6 @@ public class Author {
   @Field Asset profilePhoto;
 
   @Field String biography;
-
-  @Field("createdEntries")
-  List<Post> posts;
 
   public String name() {
     return name;
@@ -36,8 +33,5 @@ public class Author {
   public String biography() {
     return biography;
   }
-
-  public List<Post> posts() {
-    return posts;
-  }
 }
+

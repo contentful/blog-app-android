@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import blog.templates.contentful.R;
 
-/** Base Activity. */
 public abstract class AbsActivity extends ActionBarActivity {
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.

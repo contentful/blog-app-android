@@ -4,23 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import blog.templates.contentful.App;
 import blog.templates.contentful.Intents;
+import blog.templates.contentful.lib.ClientProvider;
 import blog.templates.contentful.lib.LinkGenerator;
-import blog.templates.contentful.sync.SyncService;
+import blog.templates.contentful.lib.Preferences;
 
 import static blog.templates.contentful.lib.LinkGenerator.CMD_OPEN;
 import static blog.templates.contentful.lib.LinkGenerator.PATH_AUTHOR;
 import static blog.templates.contentful.lib.LinkGenerator.PATH_SPACE;
 
-/**
- * Responsible for intercepting {@link Intent#ACTION_VIEW} intents for a pre-defined URL schema.
- */
+/** Interceptor for {@link Intent#ACTION_VIEW} intents with a pre-defined schema. */
 public class LinkRouterActivity extends Activity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     Uri data = getIntent().getData();
-
     if (data != null) {
       if (CMD_OPEN.equals(data.getHost())) {
         String firstPathSegment = data.getPathSegments().get(0);
@@ -40,25 +39,27 @@ public class LinkRouterActivity extends Activity {
     finish();
   }
 
-  /**
-   * Change space credentials.
-   *
-   * @param data data uri
-   */
   private void openSpace(Uri data) {
     String spaceId = data.getLastPathSegment();
     String token = data.getQueryParameter("access_token");
 
     if (spaceId != null && token != null) {
-      SyncService.changeSpace(spaceId, token);
+      // Save credentials to Shared Preferences.
+      Preferences.get().edit().putString(Preferences.KEY_SPACE_ID, spaceId)
+          .putString(Preferences.KEY_ACCESS_TOKEN, token).commit();
+
+      // Reset ClientProvider singleton.
+      ClientProvider.reset();
+
+      // Request sync, invalidating any existing data.
+      App.requestSync(true);
+
+      startActivity(new Intent(this, PostListActivity.class)
+          .setAction(Intents.ACTION_CHANGE_SPACE)
+          .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
   }
 
-  /**
-   * Show list of posts by a specific author.
-   *
-   * @param data data uri
-   */
   private void openAuthor(Uri data) {
     String remoteId = data.getQueryParameter("remote_id");
 
