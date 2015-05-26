@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!-- API Credentials -->
-  <string name="api_space_id">j3bpqm3bs1zw</string>
-  <string name="api_access_token">f3f12e5625e252ec7c4215c155747c9eab3665ef5dc7b576a4221f42ae53e732</string>
-
-  <!-- Content Types -->
-  <string name="content_type_author">1kUEViTN4EmGiEaaeC6ouY</string>
-  <string name="content_type_category">5KMiN6YPvi42icqAUQMCQe</string>
-  <string name="content_type_post">2wKn6yEnZewu2SCCkus4as</string>
-
   <!-- URL Interception -->
   <string name="url_intercept_schema">contentful-blog</string>
 </resources>

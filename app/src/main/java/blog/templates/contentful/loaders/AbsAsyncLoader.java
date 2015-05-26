@@ -8,10 +8,10 @@ import blog.templates.contentful.App;
  *
  * @param <T> result type
  */
-public abstract class AbsLoader<T> extends AsyncTaskLoader<T> {
-  private T result;
+public abstract class AbsAsyncLoader<T> extends AsyncTaskLoader<T> {
+  protected T result;
 
-  AbsLoader() {
+  AbsAsyncLoader() {
     super(App.get());
   }
 

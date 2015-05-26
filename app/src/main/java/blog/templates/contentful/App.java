@@ -1,20 +1,33 @@
 package blog.templates.contentful;
 
 import android.app.Application;
-import blog.templates.contentful.sync.SyncService;
+import blog.templates.contentful.lib.ClientProvider;
+import blog.templates.contentful.vault.BlogSpace;
+import com.contentful.vault.SyncConfig;
+import com.contentful.vault.Vault;
 
-/** Main Application class. */
 public class App extends Application {
-  private static App sInstance;
+  private static App instance;
 
   @Override public void onCreate() {
     super.onCreate();
-    sInstance = this;
-
-    SyncService.sync();
+    instance = this;
+    requestSync();
   }
 
   public static App get() {
-    return sInstance;
+    return instance;
+  }
+
+  public static void requestSync() {
+    requestSync(false);
+  }
+
+  public static void requestSync(boolean invalidate) {
+    Vault.with(get(), BlogSpace.class).requestSync(
+        SyncConfig.builder()
+            .setClient(ClientProvider.get())
+            .setInvalidate(invalidate)
+            .build());
   }
 }

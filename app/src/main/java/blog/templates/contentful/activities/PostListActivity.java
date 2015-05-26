@@ -8,21 +8,17 @@ import android.view.View;
 import blog.templates.contentful.Intents;
 import blog.templates.contentful.adapters.AbsListAdapter;
 import blog.templates.contentful.adapters.PostListAdapter;
-import blog.templates.contentful.dto.Author;
-import blog.templates.contentful.dto.Post;
 import blog.templates.contentful.lib.LoaderId;
 import blog.templates.contentful.loaders.PostListLoader;
+import blog.templates.contentful.vault.Author;
+import blog.templates.contentful.vault.Post;
 import blog.templates.contentful.views.AuthorView;
 import java.util.List;
+import org.parceler.Parcels;
 
-/**
- * Displays a list of posts.
- *
- * Given an author's remote ID was provided as an extra of the intent will attach additional
- * header view to the list containing the author's details and filter the posts accordingly,
- * otherwise displays all available posts.
- */
 public class PostListActivity extends AbsListActivity<Post, PostListLoader.Result> {
+  private Author author;
+
   private AuthorView authorView;
 
   @Override protected int getLoaderId() {
@@ -34,24 +30,17 @@ public class PostListActivity extends AbsListActivity<Post, PostListLoader.Resul
   }
 
   @Override public Loader<PostListLoader.Result> onCreateLoader(int id, Bundle args) {
-    String authorRemoteId = getAuthorRemoteId();
-    if (authorRemoteId == null) {
-      return PostListLoader.newInstance();
-    }
-
-    return PostListLoader.forAuthor(authorRemoteId);
+    return new PostListLoader(getAuthorRemoteId());
   }
 
   @Override protected List<Post> getResultList(PostListLoader.Result data) {
-    return data.getPosts();
+    return data.posts();
   }
 
-  @Override public void onLoadFinished(Loader<PostListLoader.Result> loader,
-      PostListLoader.Result data) {
+  @Override public void onLoadFinished(Loader<PostListLoader.Result> loader, PostListLoader.Result data) {
     super.onLoadFinished(loader, data);
-
     if (data != null) {
-      Author author = data.getAuthor();
+      author = data.author();
       if (author != null) {
         authorView.populate(author);
       }
@@ -66,7 +55,7 @@ public class PostListActivity extends AbsListActivity<Post, PostListLoader.Resul
 
     Post post = adapter.getItem(position - headerViewsCount);
     startActivity(new Intent(this, PostActivity.class)
-        .putExtra(Intents.EXTRA_POST, post));
+        .putExtra(Intents.EXTRA_POST, Parcels.wrap(post)));
   }
 
   @Override protected void initList() {

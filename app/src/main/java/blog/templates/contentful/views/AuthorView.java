@@ -6,15 +6,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import blog.templates.contentful.R;
-import blog.templates.contentful.dto.Author;
+import blog.templates.contentful.vault.Author;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.contentful.vault.Asset;
 import com.squareup.picasso.Picasso;
 
-/** Author View. */
 public class AuthorView extends LinearLayout {
   @InjectView(R.id.photo) ImageView photo;
+
   @InjectView(R.id.name) TextView name;
+
   @InjectView(R.id.bio) TextView bio;
 
   public AuthorView(Context context) {
@@ -28,8 +30,11 @@ public class AuthorView extends LinearLayout {
   }
 
   public void populate(Author author) {
-    Picasso.with(getContext()).load(author.profilePhoto()).fit().centerInside().into(photo);
+    Asset asset = author.profilePhoto();
+    if (asset != null) {
+      Picasso.with(getContext()).load(asset.url()).fit().centerInside().into(photo);
+    }
     name.setText(author.name());
-    bio.setText(author.bio());
+    bio.setText(author.biography());
   }
 }

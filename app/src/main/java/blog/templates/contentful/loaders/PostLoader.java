@@ -1,36 +1,38 @@
 package blog.templates.contentful.loaders;
 
 import blog.templates.contentful.adapters.PostListAdapter;
-import blog.templates.contentful.dto.Author;
-import blog.templates.contentful.dto.Post;
 import blog.templates.contentful.lib.LinkGenerator;
+import blog.templates.contentful.vault.Author;
+import blog.templates.contentful.vault.Post;
 import com.commonsware.cwac.anddown.AndDown;
+import com.contentful.vault.Asset;
 import java.util.List;
 import org.joda.time.format.ISODateTimeFormat;
 
-/** Loader for a single post. */
-public class PostLoader extends AbsLoader<String> {
+public class PostLoader extends AbsAsyncLoader<String> {
   final String postTitle;
+
   final String postBody;
+
   final String postDate;
+
   final String postImage;
-  final String authorName;
-  final String authorRemoteId;
+
+  final Author author;
 
   public PostLoader(Post post) {
     postTitle = post.title();
     postBody = post.body();
     postDate = post.date();
-    postImage = post.featuredImage();
+
+    Asset image = post.featuredImage();
+    postImage = image == null ? null : image.url();
 
     List<Author> authors = post.authors();
-    if (authors == null) {
-      authorName = null;
-      authorRemoteId = null;
+    if (authors.size() == 0) {
+      author = null;
     } else {
-      Author author = authors.get(0);
-      authorName = author.name();
-      authorRemoteId = author.remoteId();
+      author = authors.get(0);
     }
   }
 
@@ -71,16 +73,9 @@ public class PostLoader extends AbsLoader<String> {
   private String getAuthorHtml() {
     String result = "";
 
-    if (authorName != null) {
-      String link;
-
-      if (authorRemoteId == null) {
-        link = "#";
-      } else {
-        link = LinkGenerator.author(authorRemoteId);
-      }
-
-      result = String.format("<a style=\"margin-left: 4px;\" href=\"%s\">%s</a>", link, authorName);
+    if (author != null && author.name() != null) {
+      result = String.format("<a style=\"margin-left: 4px;\" href=\"%s\">%s</a>",
+          LinkGenerator.author(author.remoteId()), author.name());
     }
 
     return result;

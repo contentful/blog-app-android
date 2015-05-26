@@ -7,10 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import java.util.List;
 
-/**
- * Simplifies creation of adapters that contain a list of T typed objects. Applies the
- * view holder pattern.
- */
 public abstract class AbsListAdapter<T, VH> extends BaseAdapter {
   protected List<T> data;
 

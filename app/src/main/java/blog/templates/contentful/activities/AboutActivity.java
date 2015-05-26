@@ -9,7 +9,6 @@ import blog.templates.contentful.R;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/** AboutActivity. */
 public class AboutActivity extends ActionBarActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
