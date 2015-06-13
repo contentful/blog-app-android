@@ -9,6 +9,8 @@ import com.contentful.vault.Asset;
 import java.util.List;
 import org.joda.time.format.ISODateTimeFormat;
 
+import static org.apache.commons.lang3.StringUtils.defaultString;
+
 public class PostLoader extends AbsAsyncLoader<String> {
   final String postTitle;
 
@@ -21,8 +23,8 @@ public class PostLoader extends AbsAsyncLoader<String> {
   final Author author;
 
   public PostLoader(Post post) {
-    postTitle = post.title();
-    postBody = post.body();
+    postTitle = defaultString(post.title(), "");
+    postBody = defaultString(post.body(), "");
     postDate = post.date();
 
     Asset image = post.featuredImage();
