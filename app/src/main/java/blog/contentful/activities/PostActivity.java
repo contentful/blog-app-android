@@ -1,9 +1,13 @@
 package blog.contentful.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import blog.contentful.Intents;
 import blog.contentful.R;
 import blog.contentful.lib.LoaderId;
@@ -20,6 +24,16 @@ public class PostActivity extends AbsActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_post);
     ButterKnife.inject(this);
+
+    webView.setWebViewClient(new WebViewClient(){
+      @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        if (url.startsWith(getString(R.string.url_intercept_schema))) {
+          startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+          return true;
+        }
+        return super.shouldOverrideUrlLoading(view, url);
+      }
+    });
 
     initLoader();
   }
