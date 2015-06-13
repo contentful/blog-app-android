@@ -17,7 +17,7 @@ android {
     exclude 'META-INF/NOTICE.txt'
   }
   defaultConfig {
-    applicationId "blog.templates.contentful"
+    applicationId "blog.contentful"
     minSdkVersion 14
     targetSdkVersion 22
     versionCode 2
