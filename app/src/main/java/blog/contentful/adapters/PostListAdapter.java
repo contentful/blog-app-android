@@ -5,8 +5,8 @@ import android.widget.TextView;
 import blog.contentful.R;
 import blog.contentful.vault.Author;
 import blog.contentful.vault.Post;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import java.util.List;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -51,12 +51,12 @@ public class PostListAdapter extends AbsListAdapter<Post, PostListAdapter.ViewHo
   }
 
   static class ViewHolder {
-    @InjectView(R.id.title) TextView title;
+    @Bind(R.id.title) TextView title;
 
-    @InjectView(R.id.date) TextView date;
+    @Bind(R.id.date) TextView date;
 
     ViewHolder(View rootView) {
-      ButterKnife.inject(this, rootView);
+      ButterKnife.bind(this, rootView);
     }
   }
 }

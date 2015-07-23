@@ -13,7 +13,7 @@ public class AboutActivity extends AppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_about);
-    ButterKnife.inject(this);
+    ButterKnife.bind(this);
   }
 
   @OnClick({R.id.btn_faq, R.id.btn_feedback, R.id.btn_contact, R.id.btn_license})

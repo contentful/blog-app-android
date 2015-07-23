@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import blog.contentful.Intents;
@@ -13,17 +12,17 @@ import blog.contentful.R;
 import blog.contentful.lib.LoaderId;
 import blog.contentful.loaders.PostLoader;
 import blog.contentful.vault.Post;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import org.parceler.Parcels;
 
 public class PostActivity extends AbsActivity {
-  @InjectView(R.id.web_view) WebView webView;
+  @Bind(R.id.web_view) WebView webView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_post);
-    ButterKnife.inject(this);
+    ButterKnife.bind(this);
 
     webView.setWebViewClient(new WebViewClient(){
       @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {

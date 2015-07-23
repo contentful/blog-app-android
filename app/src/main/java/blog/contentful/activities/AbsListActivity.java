@@ -13,8 +13,8 @@ import android.widget.ListView;
 import blog.contentful.App;
 import blog.contentful.R;
 import blog.contentful.adapters.AbsListAdapter;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.contentful.vault.Vault;
 import java.util.List;
@@ -35,14 +35,14 @@ public abstract class AbsListActivity<A, L> extends AbsActivity
 
   protected abstract List<A> getResultList(L data);
 
-  @InjectView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+  @Bind(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
-  @InjectView(R.id.list) ListView listView;
+  @Bind(R.id.list) ListView listView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_list);
-    ButterKnife.inject(this);
+    ButterKnife.bind(this);
 
     adapter = createAdapter();
     createReceivers();

@@ -7,17 +7,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import blog.contentful.R;
 import blog.contentful.vault.Author;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import com.contentful.vault.Asset;
 import com.squareup.picasso.Picasso;
 
 public class AuthorView extends LinearLayout {
-  @InjectView(R.id.photo) ImageView photo;
+  @Bind(R.id.photo) ImageView photo;
 
-  @InjectView(R.id.name) TextView name;
+  @Bind(R.id.name) TextView name;
 
-  @InjectView(R.id.bio) TextView bio;
+  @Bind(R.id.bio) TextView bio;
 
   public AuthorView(Context context) {
     super(context);
@@ -26,7 +26,7 @@ public class AuthorView extends LinearLayout {
 
   private void init() {
     View.inflate(getContext(), R.layout.view_author, this);
-    ButterKnife.inject(this);
+    ButterKnife.bind(this);
   }
 
   public void populate(Author author) {
