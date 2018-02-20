@@ -2,9 +2,9 @@ package blog.contentful.loaders;
 
 import blog.contentful.adapters.PostListAdapter;
 import blog.contentful.lib.LinkGenerator;
+import blog.contentful.markdown.MarkDownParser;
 import blog.contentful.vault.Author;
 import blog.contentful.vault.Post;
-import com.commonsware.cwac.anddown.AndDown;
 import com.contentful.vault.Asset;
 import java.util.List;
 import org.joda.time.format.ISODateTimeFormat;
@@ -57,7 +57,7 @@ public class PostLoader extends AbsAsyncLoader<String> {
         .append(getDateHtml())
         .append(getAuthorHtml())
         .append("</h4>")
-        .append(new AndDown().markdownToHtml(postBody))
+        .append(new MarkDownParser().parse(postBody))
         .append("</body></html>")
         .toString();
   }

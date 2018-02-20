@@ -2,15 +2,18 @@ package blog.contentful.adapters;
 
 import android.view.View;
 import android.widget.TextView;
-import blog.contentful.R;
-import blog.contentful.vault.Author;
-import blog.contentful.vault.Post;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import java.util.List;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
+
+import java.util.List;
+
+import blog.contentful.R;
+import blog.contentful.vault.Author;
+import blog.contentful.vault.Post;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class PostListAdapter extends AbsListAdapter<Post, PostListAdapter.ViewHolder> {
   public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("dd, MMM yyyy");
@@ -51,9 +54,9 @@ public class PostListAdapter extends AbsListAdapter<Post, PostListAdapter.ViewHo
   }
 
   static class ViewHolder {
-    @Bind(R.id.title) TextView title;
+    @BindView(R.id.title) TextView title;
 
-    @Bind(R.id.date) TextView date;
+    @BindView(R.id.date) TextView date;
 
     ViewHolder(View rootView) {
       ButterKnife.bind(this, rootView);

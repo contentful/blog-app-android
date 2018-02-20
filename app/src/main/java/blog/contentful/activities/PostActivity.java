@@ -12,12 +12,12 @@ import blog.contentful.R;
 import blog.contentful.lib.LoaderId;
 import blog.contentful.loaders.PostLoader;
 import blog.contentful.vault.Post;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import org.parceler.Parcels;
 
 public class PostActivity extends AbsActivity {
-  @Bind(R.id.web_view) WebView webView;
+  @BindView(R.id.web_view) WebView webView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

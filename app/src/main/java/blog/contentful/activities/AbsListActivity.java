@@ -13,7 +13,7 @@ import android.widget.ListView;
 import blog.contentful.App;
 import blog.contentful.R;
 import blog.contentful.adapters.AbsListAdapter;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import com.contentful.vault.Vault;
@@ -35,9 +35,9 @@ public abstract class AbsListActivity<A, L> extends AbsActivity
 
   protected abstract List<A> getResultList(L data);
 
-  @Bind(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+  @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
-  @Bind(R.id.list) ListView listView;
+  @BindView(R.id.list) ListView listView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
